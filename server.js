@@ -160,4 +160,6 @@ app.post("/rest/user", auth, function(req, res){
     });
 });
 
-app.listen(3000);
+var port = 3000;
+app.listen(port);
+console.log("\nServer Running on Port " + port);
