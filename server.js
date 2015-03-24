@@ -1,12 +1,14 @@
 var express = require('express');
 var app = express();
-var bodyParser = require('body-parser');
-var multer = require('multer'); 
+
+var bodyParser    = require('body-parser');
+var multer        = require('multer'); 
 var passport      = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var cookieParser  = require('cookie-parser');
 var session       = require('express-session');
 var mongoose      = require('mongoose');
+
 var db = mongoose.connect('mongodb://localhost/test');
 
 var UserSchema = new mongoose.Schema({
@@ -38,8 +40,7 @@ app.use(express.static(__dirname + '/public'));
 //];
 
 passport.use(new LocalStrategy(
-function(username, password, done)
-{
+function(username, password, done){
 //    for(var u in users)
 //    {
 //        if(username == users[u].username && password == users[u].password)
@@ -65,38 +66,30 @@ passport.deserializeUser(function(user, done) {
 
 app.post("/login", passport.authenticate('local'), function(req, res){
     var user = req.user;
-    console.log(user);
     res.json(user);
 });
 
-app.get('/loggedin', function(req, res)
-{
+app.get('/loggedin', function(req, res){
     res.send(req.isAuthenticated() ? req.user : '0');
 });
     
-app.post('/logout', function(req, res)
-{
+app.post('/logout', function(req, res){
     req.logOut();
     res.send(200);
 });     
 
-app.post('/register', function(req, res)
-{
+app.post('/register', function(req, res){
     var newUser = req.body;
     newUser.roles = ['student'];
-    UserModel.findOne({username: newUser.username}, function(err, user)
-    {
+    UserModel.findOne({username: newUser.username}, function(err, user){
         if(err) { return next(err); }
-        if(user)
-        {
+        if(user){
             res.json(null);
             return;
         }
         var newUser = new UserModel(req.body);
-        newUser.save(function(err, user)
-        {
-            req.login(user, function(err)
-            {
+        newUser.save(function(err, user){
+            req.login(user, function(err){
                 if(err) { return next(err); }
                 res.json(user);
             });
@@ -104,16 +97,14 @@ app.post('/register', function(req, res)
     });
 });
 
-var auth = function(req, res, next)
-{
+var auth = function(req, res, next){
     if (!req.isAuthenticated())
         res.send(401);
     else
         next();
 };
 
-app.get("/rest/user", auth, function(req, res)
-{
+app.get("/rest/user", auth, function(req, res){
     UserModel.find(function(err, users)
     {
         res.json(users);
