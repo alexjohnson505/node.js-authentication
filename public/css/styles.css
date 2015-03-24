@@ -1,6 +1,18 @@
 body {
-	background-color: #eee;
-	max-width: 800px;
-	margin: 30px auto;
+	background-color: #888;
+}
 
+.container {
+	margin-top: 20px;
+	padding-bottom: 20px;
+	background-color: #eee;
+}
+
+nav.menu {
+	font-size: 14px;
+	padding: 20px 10px;
+}
+
+input {
+	margin: 5px 0;
 }
