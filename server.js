@@ -104,14 +104,14 @@ var auth = function(req, res, next){
         next();
 };
 
-app.get("/rest/user", auth, function(req, res){
+app.get("/api/user", auth, function(req, res){
     UserModel.find(function(err, users)
     {
         res.json(users);
     });
 });
 
-app.delete("/rest/user/:id", auth, function(req, res){
+app.delete("/api/user/:id", auth, function(req, res){
     UserModel.findById(req.params.id, function(err, user){
         user.remove(function(err, count){
             UserModel.find(function(err, users){
@@ -121,7 +121,7 @@ app.delete("/rest/user/:id", auth, function(req, res){
     });
 });
 
-app.put("/rest/user/:id", auth, function(req, res){
+app.put("/api/user/:id", auth, function(req, res){
     UserModel.findById(req.params.id, function(err, user){
         user.update(req.body, function(err, count){
             UserModel.find(function(err, users){
@@ -131,7 +131,7 @@ app.put("/rest/user/:id", auth, function(req, res){
     });
 });
 
-app.post("/rest/user", auth, function(req, res){
+app.post("/api/user", auth, function(req, res){
     UserModel.findOne({username: req.body.username}, function(err, user) {
         if(user == null)
         {
@@ -151,6 +151,10 @@ app.post("/rest/user", auth, function(req, res){
     });
 });
 
-var port = 3000;
-app.listen(port);
+// change ip based on hosting config
+var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+
+app.listen(port, ip);
 console.log("\nServer Running on Port " + port);
+
