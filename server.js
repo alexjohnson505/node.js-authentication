@@ -155,28 +155,55 @@ var courses = [
 ];
 
 app.get("/api/course", function(req, res){
+    
+    // Return courses lis
     res.json(courses);
 });
 
 app.get("/api/course/:id", function(req, res){
+    
+    // Return specific course
     res.json(courses[req.params.id]);
 });
 
-app.delete("/api/user/:id", function(req, res){
+app.delete("/api/course/:id", function(req, res){
+    
+    // get ID
     var id = req.params.id;
+
+    // Save course to memory
     var deletedCourse = courses[id];
-    courses = courses.splice(id, 1);
-    res.json(deletedCourse);
+    
+    // Remove from array
+    courses.splice(id, 1);
+    
+    // Return deleted course
+    res.json(courses);
 });
 
-app.put("/api/user/:id", function(req, res){
+app.put("/api/course/:id", function(req, res){
+    
+    // Get id
     var id = req.params.id;
+
+    // Return course
     res.json(courses[id])
 });
 
-app.post("/api/user", function(req, res){
-    var course = req.params;
+app.post("/api/course", function(req, res){
+    
+    // Get course from request body
+    var course = {
+        name : req.body.name,
+        category : req.body.category,
+        dateCreated : req.body.dateCreated,
+        description : req.body.description
+    }
+    
+    // Add course
     courses.push(course);
+
+    // Return course list
     res.json(courses)
 });
 

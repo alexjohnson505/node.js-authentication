@@ -5,9 +5,15 @@ app.controller('CoursesCtrl', function($scope, $http){
     $http.get("/api/course")
     .success(function(courses){
         $scope.courses = courses;
+
+
+
+        $scope.add({name : "Node", dateCreated : "10/12", category : "urple", description : "what"})
+
+
     });
     
-    $scope.remove = function(index){
+    $scope.delete = function(index){
         $http.delete('/api/course/' + index)
         .success(function(courses){
            $scope.courses = courses; 
