@@ -53,6 +53,8 @@ var checkLoggedin = function($q, $timeout, $http, $location, $rootScope){
 
 app.factory('courses', function courseFactory($http) {
     return {
+
+        // GET
         get : function(callback){
 
             $http.get("/api/course")
@@ -64,6 +66,8 @@ app.factory('courses', function courseFactory($http) {
                 alert("API Error in removing course");
             })
         },
+
+        // DELETE
         delete : function(index, callback){
             $http.delete('/api/course/' + index)
             .success(function(courses){
@@ -73,6 +77,8 @@ app.factory('courses', function courseFactory($http) {
                 alert("API Error in removing course");
             })
         },
+
+        // PUT
         put : function(course, callback){
             $http.put('/api/course/'+course._id, course)
             .success(function(courses){
@@ -82,6 +88,8 @@ app.factory('courses', function courseFactory($http) {
                 alert("API Error in updating course");
             })
         },
+
+        // POST
         post : function(course, callback){
             $http.post('/api/course', course)
             .success(function(courses){

@@ -16,3 +16,7 @@ nav.menu {
 input {
 	margin: 5px 0;
 }
+
+.course-list .btn-warning {
+	float: right;
+}

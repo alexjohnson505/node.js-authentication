@@ -1,13 +1,16 @@
 app.controller('CoursesCtrl', function($scope, $http, courses){
 
+    // Local variable for course list
     $scope.courses = [];
 
-    // Load courses
+    // Local variable for the current
+    // active course (edit or new)
+    $scope.course = {};
+
+    // initialize course list from server
     courses.get(function(courses){
         $scope.courses = courses;
     });
-
-    //    $scope.add({name : "Node", dateCreated : "10/12", category : "urple", description : "what"})
 
     $scope.delete = function(index){
         courses.delete(index, function(courses){
@@ -26,22 +29,31 @@ app.controller('CoursesCtrl', function($scope, $http, courses){
             $scope.courses = courses; 
         });
     }
-    
 
     /********
         UI 
      ********/
 
-
-    $scope.edit = function(course){
-        $scope.course = course;
-    }
-
-    $scope.addCourse = function(){
+    // Open edit modal
+    $scope.openEdit = function(index){
+        $scope.activeTitle = "Edit Course";
+        
+        $scope.course = courses[index];
+        
         $("#editModal").modal()
     }
 
-    $scope.test = function(){
-        alert("wtf")
+    // Open create modal
+    $scope.openNew = function(){
+        $scope.activeTitle = "Create New Course";
+        $scope.course = [];
+        $("#editModal").modal()
     }
+
+    // Save a course
+    $scope.save = function(course){
+        cons
+
+    }
+
 });
