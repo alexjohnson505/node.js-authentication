@@ -9,7 +9,13 @@ var cookieParser  = require('cookie-parser');
 var session       = require('express-session');
 var mongoose      = require('mongoose');
 
-var db = mongoose.connect('mongodb://localhost/test');
+// change ip based on hosting config
+var ip     = process.env.OPENSHIFT_NODEJS_IP   || '127.0.0.1';
+var port   = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+var db_url = process.env.OPENSHIFT_MONGODB_URL || 'localhost/test';
+
+// Open Database Connection
+var db = mongoose.connect('mongodb://' + db_url);
 
 var UserSchema = new mongoose.Schema({
     username: String,
@@ -30,6 +36,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static(__dirname + '/public'));
+
+app.get("/api/", function(req, res){
+    
+    // Return courses list
+    res.json({ message : "Hello! Welcome to the API.",
+               mongo : db_url });
+});
+
+// REVEAL FOR TESTING ONLY
+// app.get("/env/", function(req, res){
+
+//     // Return courses lis
+//     res.json({ message : process.env });
+// });
 
 /***************************************
          Authentication
@@ -225,10 +245,7 @@ app.post("/api/course", function(req, res){
              Server
  ***************************************/
 
-// change ip based on hosting config
-var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
-
 app.listen(port, ip);
+
 console.log("\nServer Running on Port " + port);
 
