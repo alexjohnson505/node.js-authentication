@@ -9,7 +9,7 @@ app.controller('CoursesCtrl', function($scope, $http, $filter, courses){
 
     // The last selected ID.
     // null, equals a course is being created
-    $scope.selectedCourseId = null;
+    $scope.selectedCourseId = -1;
 
     // initialize course list from server
     courses.get(function(courses){
@@ -29,7 +29,8 @@ app.controller('CoursesCtrl', function($scope, $http, $filter, courses){
         // Update Model Title
         $scope.activeTitle = "Edit Course";
         
-        $scope.course = $scope.courses[index];
+        // Copy course to memory
+        $scope.course = angular.copy($scope.courses[index]);
 
         $("#editModal").modal()
     }
@@ -37,7 +38,7 @@ app.controller('CoursesCtrl', function($scope, $http, $filter, courses){
     // Open create modal
     $scope.openNew = function(){
 
-        $scope.selectedCourseId = null;
+        $scope.selectedCourseId = -1;
 
         $scope.activeTitle = "Create New Course";
 
@@ -52,7 +53,7 @@ app.controller('CoursesCtrl', function($scope, $http, $filter, courses){
         var id = $scope.selectedCourseId;
         
         // Edit
-        if (id){
+        if (id > -1){
 
             // Update existing course
             $scope.update(id, course);
