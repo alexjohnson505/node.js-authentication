@@ -50,3 +50,46 @@ var checkLoggedin = function($q, $timeout, $http, $location, $rootScope){
     
     return deferred.promise;
 };
+
+app.factory('courses', function courseFactory($http) {
+    return {
+        get : function(callback){
+
+            $http.get("/api/course")
+
+            .success(function(courses){
+                callback(courses);
+            })
+            .error(function(){
+                alert("API Error in removing course");
+            })
+        },
+        delete : function(index, callback){
+            $http.delete('/api/course/' + index)
+            .success(function(courses){
+               callback(courses);
+            })
+            .error(function(){
+                alert("API Error in removing course");
+            })
+        },
+        put : function(course, callback){
+            $http.put('/api/course/'+course._id, course)
+            .success(function(courses){
+                callback(courses);
+            })
+            .error(function(){
+                alert("API Error in updating course");
+            })
+        },
+        post : function(course, callback){
+            $http.post('/api/course', course)
+            .success(function(courses){
+                callback(courses)
+            })
+            .error(function(){
+                alert("API Error in adding course");
+            })
+        }
+    }
+});

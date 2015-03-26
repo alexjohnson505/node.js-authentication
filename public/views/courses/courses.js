@@ -1,48 +1,38 @@
-app.controller('CoursesCtrl', function($scope, $http){
-    
+app.controller('CoursesCtrl', function($scope, $http, courses){
+
     $scope.courses = [];
 
-    $http.get("/api/course")
-    .success(function(courses){
+    // Load courses
+    courses.get(function(courses){
         $scope.courses = courses;
-
-
-
-        $scope.add({name : "Node", dateCreated : "10/12", category : "urple", description : "what"})
-
-
     });
-    
+
+    //    $scope.add({name : "Node", dateCreated : "10/12", category : "urple", description : "what"})
+
     $scope.delete = function(index){
-        $http.delete('/api/course/' + index)
-        .success(function(courses){
+        courses.delete(index, function(courses){
            $scope.courses = courses; 
-        })
-        .error(function(){
-            alert("API Error in removing course");
         })
     }
     
     $scope.update = function(course){
-        $http.put('/api/course/'+course._id, course)
-        .success(function(courses){
-            $scope.courses = courses; 
-        })
-        .error(function(){
-            alert("API Error in updating course");
+        courses.put(course, function(courses){
+           $scope.courses = courses; 
         })
     }
     
     $scope.add = function(course){
-        $http.post('/api/course', course)
-        .success(function(courses){
+        courses.post(course, function(courses){
             $scope.courses = courses; 
-        })
-        .error(function(){
-            alert("API Error in adding course");
-        })
+        });
     }
     
+
+    /********
+        UI 
+     ********/
+
+
     $scope.edit = function(course){
         $scope.course = course;
     }
