@@ -79,8 +79,8 @@ app.factory('courses', function courseFactory($http) {
         },
 
         // PUT
-        put : function(course, callback){
-            $http.put('/api/course/'+course._id, course)
+        put : function(id, course, callback){
+            $http.put('/api/course/' + id, course)
             .success(function(courses){
                 callback(courses);
             })
@@ -91,6 +91,16 @@ app.factory('courses', function courseFactory($http) {
 
         // POST
         post : function(course, callback){
+
+            // Convert array to object
+            // (Makes Node happier).
+            var course = {
+                name : course['name'],
+                category : course['category'],
+                dateCreated : course['dateCreated'],
+                description : course['description'],
+            }
+
             $http.post('/api/course', course)
             .success(function(courses){
                 callback(courses)

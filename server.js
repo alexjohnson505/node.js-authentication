@@ -98,8 +98,7 @@ var auth = function(req, res, next){
  ***************************************/
 
 app.get("/api/user", auth, function(req, res){
-    UserModel.find(function(err, users)
-    {
+    UserModel.find(function(err, users){
         res.json(users);
     });
 });
@@ -186,8 +185,23 @@ app.put("/api/course/:id", function(req, res){
     // Get id
     var id = req.params.id;
 
+    var oldCourse = courses[id];
+
+    // Get course from request body
+    var course = {
+        name : req.body.name,
+        category : req.body.category,
+        description : req.body.description,
+
+        // Use former date created
+        dateCreated : oldCourse.dateCreated
+    }
+
+    // Update course
+    courses[id] = course;
+
     // Return course
-    res.json(courses[id])
+    res.json(courses)
 });
 
 app.post("/api/course", function(req, res){
@@ -199,7 +213,7 @@ app.post("/api/course", function(req, res){
         dateCreated : req.body.dateCreated,
         description : req.body.description
     }
-    
+
     // Add course
     courses.push(course);
 
