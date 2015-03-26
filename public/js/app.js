@@ -6,9 +6,13 @@ app.config(function($routeProvider, $httpProvider) {
       .when('/home', {
           templateUrl: 'views/home/home.html'
       })
-      .when('/profile', {
-          templateUrl: 'views/profile/profile.html',
-          controller: 'ProfileCtrl',
+      .when('/courses', {
+          templateUrl: 'views/courses/courses.html',
+          controller: 'CoursesCtrl',
+      })
+      .when('/user', {
+          templateUrl: 'views/user/user.html',
+          controller: 'UserCtrl',
           resolve: {
               loggedin: checkLoggedin
           }

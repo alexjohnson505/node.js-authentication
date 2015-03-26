@@ -1,4 +1,4 @@
-app.controller('ProfileCtrl', function($scope, $http){
+app.controller('UserCtrl', function($scope, $http){
     
     $http.get("/api/user")
     .success(function(users)

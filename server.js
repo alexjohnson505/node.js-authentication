@@ -17,7 +17,6 @@ var UserSchema = new mongoose.Schema({
     firstName: String,
     lastName: String,
     email: String,
-    roles: [String]
 });
 
 var UserModel = mongoose.model('UserModel', UserSchema);
@@ -32,24 +31,13 @@ app.use(passport.session());
 
 app.use(express.static(__dirname + '/public'));
 
-//var users =
-//[
-//    {username: 'alice', password: 'alice', firstName: 'Alice', lastName: 'Wonderland', roles: ['admin', 'student', 'instructor']},
-//    {username: 'bob', password: 'bob', firstName: 'Bob', lastName: 'Marley', roles: ['student']},
-//    {username: 'charlie', password: 'charlie', firstName: 'Charlie', lastName: 'Brown', roles: ['instructor']}
-//];
+/***************************************
+         Authentication
+ ***************************************/
 
 passport.use(new LocalStrategy(
 function(username, password, done){
-//    for(var u in users)
-//    {
-//        if(username == users[u].username && password == users[u].password)
-//        {
-//            return done(null, users[u]);
-//        }
-//    }
-    UserModel.findOne({username: username, password: password}, function(err, user)
-    {
+    UserModel.findOne({username: username, password: password}, function(err, user){
         if (err) { return done(err); }
         if (!user) { return done(null, false); }
         return done(null, user);
@@ -98,11 +86,16 @@ app.post('/register', function(req, res){
 });
 
 var auth = function(req, res, next){
-    if (!req.isAuthenticated())
+    if (!req.isAuthenticated()) {
         res.send(401);
-    else
+    } else {
         next();
+    }
 };
+
+/***************************************
+             Users
+ ***************************************/
 
 app.get("/api/user", auth, function(req, res){
     UserModel.find(function(err, users)
@@ -133,23 +126,63 @@ app.put("/api/user/:id", auth, function(req, res){
 
 app.post("/api/user", auth, function(req, res){
     UserModel.findOne({username: req.body.username}, function(err, user) {
-        if(user == null)
-        {
+        if(user == null) {
             user = new UserModel(req.body);
             user.save(function(err, user){
                 UserModel.find(function(err, users){
                     res.json(users);
                 });
             });
-        }
-        else
-        {
+        } else {
             UserModel.find(function(err, users){
                 res.json(users);
             });
         }
     });
 });
+
+/***************************************
+             Courses
+ ***************************************/
+
+// Temp data
+var courses = [ 
+    { name : "Java 101", category : "PROG", dateCreated : "1/1/2015", description : "Wow" },
+    { name : "MongoDB 101", category : "DB", dateCreated : "2/1/2015", description : "Good" },
+    { name : "Express 101", category : "PROG", dateCreated : "3/1/2015", description : "Better" }, 
+    { name : "AngularJS 101", category : "WEB", dateCreated : "4/1/2015", description : "Best" }, 
+    { name : "NodeJS 101", category : "PROG", dateCreated : "5/1/2015", description : "Awesome" }
+];
+
+app.get("/api/course", function(req, res){
+    res.json(courses);
+});
+
+app.get("/api/course/:id", function(req, res){
+    res.json(courses[req.params.id]);
+});
+
+app.delete("/api/user/:id", function(req, res){
+    var id = req.params.id;
+    var deletedCourse = courses[id];
+    courses = courses.splice(id, 1);
+    res.json(deletedCourse);
+});
+
+app.put("/api/user/:id", function(req, res){
+    var id = req.params.id;
+    res.json(courses[id])
+});
+
+app.post("/api/user", function(req, res){
+    var course = req.params;
+    courses.push(course);
+    res.json(courses)
+});
+
+/***************************************
+             Server
+ ***************************************/
 
 // change ip based on hosting config
 var ip = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
